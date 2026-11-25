@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Finanzas Spa · Calculadora de costos</title>
 <meta name="description" content="Finanzas Spa: calculadora de costos y ganancia operativa de la jornada para cualquier spa. Cada spa escribe sus propios datos. Proyecto final ADMI 1301.">
-<meta name="theme-color" content="#2E2620">
+<meta name="theme-color" content="#E6D7B8">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -13,19 +13,25 @@
 <meta name="apple-mobile-web-app-title" content="Finanzas Spa">
 <style>
   :root {
-    --fondo: #FBF7EF;
-    --arena: #F1E8D8;
-    --tinta: #3A3029;
-    --suave: #6F6355;
-    --oro: #B8923A;
-    --oro-texto: #8A6A1F;
-    --taupe: #8C7B6B;
-    --salvia: #6B8F71;
-    --salvia-osc: #4C7352;
-    --alerta: #9A3B2E;
-    --noche: #2E2620;
-    --linea: #E3D6BC;
-    --tarjeta: #FFFDF8;
+    /* Paleta neutra cálida: Marfil, Crudo, Champagne, Crema, Nude, Nuez, Beige, Greige y Tostado */
+    --fondo: #F6F0E0;       /* Marfil */
+    --arena: #EEE6D7;       /* Crudo */
+    --champagne: #E6D7B8;
+    --crema: #FDEDD4;
+    --nude: #F2D6C0;
+    --nuez: #DDC2A5;
+    --greige: #C6C2B7;
+    --tinta: #3A2C20;
+    --suave: #6B5C4B;
+    --oro: #C79D6A;         /* Tostado */
+    --oro-texto: #86592A;
+    --taupe: #9C9384;
+    --salvia: #6F8F6E;
+    --salvia-osc: #4C6F50;
+    --alerta: #A3442F;
+    --noche: #4A3828;       /* cacao, solo para acentos oscuros */
+    --linea: #DDD0B6;
+    --tarjeta: #FFFCF4;
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
@@ -37,22 +43,19 @@
   [hidden] { display: none !important; }
 
   /* ---------- Encabezado ---------- */
-  .cab { background: var(--noche); color: #F3EBDD; padding: calc(18px + env(safe-area-inset-top)) 20px 18px; }
+  .cab { background: linear-gradient(135deg, var(--crema), var(--champagne)); color: var(--tinta); border-bottom: 1px solid var(--linea);
+         padding: calc(16px + env(safe-area-inset-top)) 20px 16px; }
   .cab-in { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
-  .logo {
-    flex: none; width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--oro);
-    display: grid; place-items: center; font-family: Georgia, serif; font-style: italic; font-weight: 700;
-    font-size: 19px; color: #F3EBDD; letter-spacing: .02em;
-  }
-  .cab h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 26px; line-height: 1.1; margin: 0; }
-  .cab p { margin: 2px 0 0; color: #D9B96A; font-size: 14px; }
+  .logo { flex: none; width: 56px; height: 56px; }
+  .cab h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 27px; line-height: 1.1; margin: 0; letter-spacing: .01em; }
+  .cab p { margin: 2px 0 0; color: var(--oro-texto); font-size: 14px; }
   .aviso { background: var(--arena); color: var(--suave); font-size: 13px; padding: 8px 20px; border-bottom: 1px solid var(--linea); text-align: center; }
 
   main { max-width: 760px; margin: 0 auto; padding: 18px 16px calc(104px + env(safe-area-inset-bottom)); }
 
   /* ---------- Navegación inferior ---------- */
   .nav {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: rgba(251, 247, 239, .96);
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: rgba(246, 240, 224, .96);
     backdrop-filter: blur(8px); border-top: 1px solid var(--linea); padding-bottom: env(safe-area-inset-bottom);
   }
   .nav-in { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
@@ -70,9 +73,9 @@
   h2.primero { margin-top: 4px; }
   .nota { font-size: 13px; color: var(--suave); margin: 10px 0 0; }
   .tarjeta-b { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 14px; padding: 16px; }
-  .bienvenida { background: var(--noche); color: #F3EBDD; border-radius: 16px; padding: 20px; margin-bottom: 8px; }
-  .bienvenida h2 { color: #F3EBDD; margin-top: 0; }
-  .bienvenida ol { margin: 8px 0 0; padding-left: 22px; color: #E6DCC8; }
+  .bienvenida { background: linear-gradient(135deg, var(--crema), var(--nude)); color: var(--tinta); border: 1px solid var(--linea); border-radius: 16px; padding: 20px; margin-bottom: 8px; }
+  .bienvenida h2 { color: var(--tinta); margin-top: 0; }
+  .bienvenida ol { margin: 8px 0 0; padding-left: 22px; color: #5A4A3A; }
   .bienvenida li { margin: 6px 0; }
   .vacio { text-align: center; padding: 36px 16px; }
   .vacio p { color: var(--suave); margin: 0 0 16px; }
@@ -93,7 +96,7 @@
     flex: none; width: 46px; font-size: 22px; line-height: 1; border: 1.5px solid var(--linea); border-radius: 10px;
     background: var(--arena); color: var(--tinta);
   }
-  .paso button:active { background: #E6D9BE; }
+  .paso button:active { background: var(--champagne); }
 
   .trat { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
   .trat-cab { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
@@ -101,7 +104,7 @@
   .auto { font-size: 15px; color: var(--suave); background: var(--arena); border-radius: 10px; padding: 12px; }
 
   .boton {
-    font-size: 17px; font-weight: 600; background: var(--oro); color: #fff; border: 0; border-radius: 12px; padding: 14px 22px;
+    font-size: 17px; font-weight: 700; background: var(--oro); color: #2F2217; border: 0; border-radius: 12px; padding: 14px 22px;
   }
   .boton.grande { width: 100%; font-size: 18px; padding: 16px; }
   .boton:active { filter: brightness(.94); }
@@ -117,11 +120,11 @@
   .acciones { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
   .acciones > * { flex: 1 1 auto; }
 
-  .error-caja { border: 1.5px solid var(--alerta); background: #FBEFEC; border-radius: 12px; padding: 14px 16px; margin: 16px 0; }
+  .error-caja { border: 1.5px solid var(--alerta); background: #FBEDE8; border-radius: 12px; padding: 14px 16px; margin: 16px 0; }
   .error-caja h3 { margin: 0 0 6px; color: var(--alerta); font-size: 17px; }
   .error-caja ul, .error-caja p { margin: 6px 0 0; padding-left: 20px; font-size: 15px; }
   .error-caja p { padding-left: 0; }
-  .error-caja.suave { border-color: var(--oro); background: #FBF5E6; }
+  .error-caja.suave { border-color: var(--oro); background: #F8EBD3; }
   .error-caja.suave h3 { color: var(--oro-texto); }
   .error-caja button { margin-top: 10px; }
 
@@ -129,20 +132,27 @@
   .control { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; }
   .control > label { font-weight: 600; }
   .paso-corto { max-width: 220px; }
-  input[type="range"] { width: 100%; margin: 14px 0 4px; accent-color: var(--oro); height: 28px; }
+  input[type="range"] { width: 100%; margin: 14px 0 4px; height: 28px; background: transparent; -webkit-appearance: none; appearance: none; }
+  input[type="range"]::-webkit-slider-runnable-track { height: 8px; border-radius: 4px; background: var(--champagne); border: 1px solid var(--linea); }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px; height: 28px; margin-top: -11px; border-radius: 50%;
+    background: var(--oro); border: 3px solid var(--tarjeta); box-shadow: 0 1px 4px rgba(58, 44, 32, .35); }
+  input[type="range"]::-moz-range-track { height: 8px; border-radius: 4px; background: var(--champagne); border: 1px solid var(--linea); }
+  input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--oro); border: 3px solid var(--tarjeta); box-shadow: 0 1px 4px rgba(58, 44, 32, .35); }
+  input[type="range"]:focus-visible { outline: 2px solid var(--oro); outline-offset: 4px; border-radius: 6px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
   .chip { font-size: 14px; background: transparent; border: 1px solid var(--linea); color: var(--suave); border-radius: 999px; padding: 6px 12px; }
-  .chip.activo { background: var(--noche); border-color: var(--noche); color: #F3EBDD; }
+  .chip.activo { background: var(--noche); border-color: var(--noche); color: var(--fondo); }
   .deslizador { margin-bottom: 8px; }
   .deslizador .cabecera { display: flex; justify-content: space-between; font-size: 15px; }
   .deslizador output { font-weight: 700; color: var(--oro-texto); }
 
   /* ---------- Resultados ---------- */
-  .heroe { background: var(--noche); color: #F3EBDD; border-radius: 18px; padding: 20px; text-align: center; }
-  .heroe .et { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #D9B96A; }
+  .heroe { background: linear-gradient(135deg, #D6AF7C, var(--oro)); color: #2F2217; border-radius: 18px; padding: 20px; text-align: center;
+           box-shadow: 0 6px 18px rgba(134, 89, 42, .18); }
+  .heroe .et { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #3F2A12; font-weight: 600; }
   .heroe .gran { font-family: Georgia, serif; font-size: 40px; line-height: 1.15; margin: 4px 0 6px; }
-  .heroe.negativa .gran { color: #F0A89C; }
-  .heroe .sub { font-size: 14px; color: #E6DCC8; }
+  .heroe.negativa .gran { color: #6E1F10; }
+  .heroe .sub { font-size: 14px; color: #3A2810; }
   .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
   .mini { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 12px; padding: 12px 8px; text-align: center; }
   .mini .valor { font-family: Georgia, serif; font-size: 24px; line-height: 1.1; }
@@ -159,6 +169,7 @@
   .donut-caja { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
   .donut { width: 150px; height: 150px; flex: none; }
   .donut text { font-family: Georgia, serif; fill: var(--tinta); }
+  .donut .suave { fill: var(--suave); font-family: system-ui, sans-serif; }
   .leyenda { flex: 1 1 200px; font-size: 14px; }
   .leyenda div { display: flex; align-items: center; gap: 8px; padding: 5px 0; }
   .leyenda i { width: 12px; height: 12px; border-radius: 3px; flex: none; }
@@ -192,9 +203,9 @@
 
   .comparacion { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
   .comparacion .col { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 12px; padding: 12px; text-align: center; }
-  .comparacion .col.nuevo { background: var(--noche); border-color: var(--noche); color: #F3EBDD; }
+  .comparacion .col.nuevo { background: var(--noche); border-color: var(--noche); color: var(--crema); }
   .comparacion .et { font-size: 12.5px; color: var(--suave); }
-  .comparacion .nuevo .et { color: #D9B96A; }
+  .comparacion .nuevo .et { color: var(--champagne); }
   .comparacion .gr { font-family: Georgia, serif; font-size: 22px; margin-top: 2px; }
   .delta { text-align: center; font-family: Georgia, serif; font-size: 32px; margin: 16px 0 2px; }
   .delta.pos { color: var(--salvia-osc); }
@@ -207,13 +218,13 @@
 
   .toast {
     position: fixed; left: 50%; bottom: calc(86px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 20;
-    background: var(--noche); color: #F3EBDD; padding: 10px 18px; border-radius: 999px; font-size: 14px;
+    background: var(--noche); color: var(--crema); padding: 10px 18px; border-radius: 999px; font-size: 14px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, .25); max-width: 90vw; text-align: center;
   }
 
   @media print {
     .nav, .cab .logo, .control, .acciones, .toast, footer, .aviso { display: none !important; }
-    .cab { background: none; color: #000; padding: 0 0 10px; }
+    .cab { background: none; color: #000; padding: 0 0 10px; border: 0; }
     .cab p { color: #333; }
     body { background: #fff; }
     main { padding-bottom: 0; }
@@ -226,7 +237,16 @@
 
 <header class="cab">
   <div class="cab-in">
-    <div class="logo" aria-hidden="true">FS</div>
+    <svg class="logo" viewBox="0 0 100 100" role="img" aria-label="Logo de Finanzas Spa: una flor de loto cuyos pétalos suben como las barras de una gráfica">
+      <g transform="translate(50 80)">
+        <path transform="rotate(-58) scale(.66)" fill="#D3B28D" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+        <path transform="rotate(58) scale(.66)" fill="#D3B28D" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+        <path transform="rotate(-29) scale(.86)" fill="#C79D6A" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+        <path transform="rotate(29) scale(.86)" fill="#C79D6A" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+        <path fill="#6F4E37" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+      </g>
+      <path d="M18 85Q50 93 82 85" fill="none" stroke="#C79D6A" stroke-width="3" stroke-linecap="round"/>
+    </svg>
     <div>
       <h1>Finanzas Spa</h1>
       <p id="subtitulo">Calculadora de costos para cualquier spa</p>
@@ -387,8 +407,9 @@ document.addEventListener("click", ev => {
 });
 
 /* ---------- Auxiliares de dibujo ---------- */
-const ORO = "#B8923A", TAUPE = "#8C7B6B", ARENA = "#BFA27A", SALVIA = "#6B8F71", ALERTA = "#9A3B2E";
-const COLORES = [ORO, SALVIA, "#B5654A", "#5F7F8F", TAUPE, "#9A7FA8"];
+const TOSTADO = "#C79D6A", CACAO = "#8A6B4E", NUEZ = "#DDC2A5", SALVIA = "#6F8F6E", ALERTA = "#A3442F";
+// Colores de los tratamientos (de la paleta neutra, con suficiente contraste entre sí)
+const COLORES = ["#C79D6A", "#6F5A47", "#A9A393", "#DDC2A5", "#9C7A45", "#8E8576"];
 
 function barra(nombre, texto, valor, maximo, color) {
   const ancho = maximo > 0 ? Math.max(0, valor) / maximo * 100 : 0;
@@ -403,14 +424,15 @@ function donut(trats) {
   let acumulado = 0;
   const arcos = trats.map((t, i) => {
     const largo = t.participacion_num / 100 * C;
+    const hueco = trats.length > 1 && largo > 2 ? 1.2 : 0;          // pequeño espacio entre arcos
     const arco = `<circle cx="60" cy="60" r="${R}" fill="none" stroke="${COLORES[i % COLORES.length]}" stroke-width="22"
-      stroke-dasharray="${largo} ${C - largo}" stroke-dashoffset="${-acumulado}" transform="rotate(-90 60 60)"/>`;
+      stroke-dasharray="${largo - hueco} ${C - largo + hueco}" stroke-dashoffset="${-acumulado}" transform="rotate(-90 60 60)"/>`;
     acumulado += largo;
     return arco;
   }).join("");
   return `<svg class="donut" viewBox="0 0 120 120" role="img" aria-label="Participación de cada tratamiento en los ingresos">
-    <circle cx="60" cy="60" r="${R}" fill="none" stroke="#F1E8D8" stroke-width="22"/>${arcos}
-    <text x="60" y="58" text-anchor="middle" font-size="11" style="fill:#6F6355;font-family:system-ui">Ingresos</text>
+    <circle cx="60" cy="60" r="${R}" fill="none" stroke="#EEE6D7" stroke-width="22"/>${arcos}
+    <text class="suave" x="60" y="58" text-anchor="middle" font-size="11">Ingresos</text>
     <text x="60" y="74" text-anchor="middle" font-size="12">por servicio</text></svg>`;
 }
 
@@ -427,13 +449,13 @@ function graficaGanancia(curva, actual) {
     const alto = Math.max(1.5, Math.abs(p.ganancia) * unidad);
     const y = p.ganancia >= 0 ? base - alto : base;
     return `<rect data-n="${p.clientes}" x="${X0 + i * ancho + ancho * 0.12}" y="${y}" width="${ancho * 0.76}" height="${alto}" rx="2"
-      fill="${p.ganancia >= 0 ? SALVIA : ALERTA}" ${i === sel ? `stroke="#2E2620" stroke-width="2"` : `opacity=".75"`}>
+      fill="${p.ganancia >= 0 ? SALVIA : ALERTA}" ${i === sel ? `stroke="#4A3828" stroke-width="2"` : `opacity=".75"`}>
       <title>${p.clientes} clientes: ${p.ganancia_texto}</title></rect>`;
   }).join("");
   const etiqueta = (i, ancla) => `<text x="${X0 + i * ancho + ancho / 2}" y="${H - 6}" text-anchor="${ancla}">${curva[i].clientes}</text>`;
   const medio = (curva.length > 2 && sel !== 0 && sel !== curva.length - 1) ? etiqueta(sel, "middle") : "";
   return `<svg class="grafica" viewBox="0 0 ${W} ${H}" role="img" aria-label="Ganancia operativa según el número de clientes">
-    <line x1="${X0}" x2="${X1}" y1="${base}" y2="${base}" stroke="#BFA27A" stroke-width="1"/>
+    <line x1="${X0}" x2="${X1}" y1="${base}" y2="${base}" stroke="#B9A68A" stroke-width="1"/>
     ${barras}${etiqueta(0, "start")}${medio}${etiqueta(curva.length - 1, "end")}</svg>`;
 }
 
@@ -508,7 +530,7 @@ function pintarFormulario(d) {
       <ol><li>Escriba los datos de su spa: personal, cabinas y tratamientos.</li>
           <li>Diga cuántos clientes espera hoy.</li>
           <li>Pulse <b>Calcular</b> y vea costos, ganancia y escenarios.</li></ol>
-      <div class="acciones"><button type="button" class="boton-sec" style="color:#D9B96A;border-color:#D9B96A" data-f="ejemplo">Cargar un ejemplo</button></div>
+      <div class="acciones"><button type="button" class="boton-sec" data-f="ejemplo">Cargar un ejemplo</button></div>
     </div>`}
     <form id="form-spa" autocomplete="off" novalidate>
       <h2 class="primero">Su spa</h2>
@@ -713,13 +735,13 @@ function dibujarCuerpoResultados() {
 
     <h2>Costos de la jornada</h2>
     <div class="apilada" role="img" aria-label="Reparto entre costo de personal, insumos y ganancia">
-      <div style="width:${b.personal}%;background:${TAUPE}"></div>
-      <div style="width:${b.insumos}%;background:${ARENA}"></div>
+      <div style="width:${b.personal}%;background:${CACAO}"></div>
+      <div style="width:${b.insumos}%;background:${NUEZ}"></div>
       <div style="width:${b.ganancia}%;background:${SALVIA}"></div>
     </div>
     <div class="leyenda-h">
-      <span><i style="background:${TAUPE}"></i>Personal ${d.costo_personal}</span>
-      <span><i style="background:${ARENA}"></i>Insumos ${d.costo_insumos}</span>
+      <span><i style="background:${CACAO}"></i>Personal ${d.costo_personal}</span>
+      <span><i style="background:${NUEZ}"></i>Insumos ${d.costo_insumos}</span>
       <span><i style="background:${SALVIA}"></i>Ganancia ${negativa ? "$0" : d.ganancia}</span>
     </div>
     ${negativa ? `<p class="nota" style="color:var(--alerta)">Los costos (${d.costos_totales}) superan a los ingresos (${d.ingresos_total}): hay pérdida operativa.</p>` : ""}
@@ -789,8 +811,8 @@ function dibujarEscenarios() {
   const fila = (nombre, campo, clase) =>
     `<tr${clase ? ` class="${clase}"` : ""}><td>${nombre}</td>${lista.map(e => `<td>${e[campo]}</td>`).join("")}</tr>`;
   const grupos = lista.map(e => `<div style="margin-top:16px"><div style="font-size:15px;color:var(--oro-texto)"><b>${e.escenario}</b> (${e.clientes} clientes)</div>
-      ${barra("Ingresos", e.ingresos_total, e.ingresos_total_num, maxIng, ORO)}
-      ${barra("Costos totales", e.costos_totales, e.costos_totales_num, maxIng, TAUPE)}
+      ${barra("Ingresos", e.ingresos_total, e.ingresos_total_num, maxIng, TOSTADO)}
+      ${barra("Costos totales", e.costos_totales, e.costos_totales_num, maxIng, CACAO)}
       ${barra("Ganancia", e.ganancia, e.ganancia_num, maxIng, SALVIA)}</div>`).join("");
 
   cont.innerHTML = `

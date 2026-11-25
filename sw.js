@@ -1,6 +1,6 @@
 /* Guarda los archivos de la app en el dispositivo para que abra sin internet.
    Si se cambia algún archivo, se debe cambiar también el número de VERSION. */
-const VERSION = "finanzas-spa-v1";
+const VERSION = "finanzas-spa-v2";
 
 const ARCHIVOS = [
   "./",
@@ -11,6 +11,7 @@ const ARCHIVOS = [
   "icons/icon-192.png",
   "icons/icon-512.png",
   "icons/icon-maskable-512.png",
+  "icons/logo.svg",
   "pyodide/pyodide.js",
   "pyodide/pyodide.asm.js",
   "pyodide/pyodide.asm.wasm",

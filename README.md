@@ -6,6 +6,10 @@ Proyecto final de **ADMI 1301 · Introducción a la Programación** (Universidad
 
 > **Aviso:** el botón *Cargar ejemplo* usa **Sunny Side Luxury Spa**, un spa **ficticio** que sirve como cliente de muestra. Sus cifras son **supuestos de simulación propuestos por el grupo**. No son datos reales de ninguna empresa, y este proyecto no incluye información de mercado real.
 
+<p align="center"><img src="icons/logo.svg" alt="Logo de Finanzas Spa: una flor de loto cuyos pétalos suben como las barras de una gráfica" width="96"></p>
+
+*El logo es una flor de loto (spa) cuyos pétalos van subiendo como las barras de una gráfica (finanzas). Los colores son una paleta neutra cálida: marfil, champagne, nuez, tostado y cacao.*
+
 ## Abrir la app
 
 **https://jdespinosa2008.github.io/Finanzas_spa/**
