@@ -1,0 +1,909 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finanzas Spa · Calculadora de costos</title>
+<meta name="description" content="Finanzas Spa: calculadora de costos y ganancia operativa de la jornada para cualquier spa. Cada spa escribe sus propios datos. Proyecto final ADMI 1301.">
+<meta name="theme-color" content="#2E2620">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Finanzas Spa">
+<style>
+  :root {
+    --fondo: #FBF7EF;
+    --arena: #F1E8D8;
+    --tinta: #3A3029;
+    --suave: #6F6355;
+    --oro: #B8923A;
+    --oro-texto: #8A6A1F;
+    --taupe: #8C7B6B;
+    --salvia: #6B8F71;
+    --salvia-osc: #4C7352;
+    --alerta: #9A3B2E;
+    --noche: #2E2620;
+    --linea: #E3D6BC;
+    --tarjeta: #FFFDF8;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--fondo); color: var(--tinta);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.45;
+  }
+  button { font: inherit; cursor: pointer; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Encabezado ---------- */
+  .cab { background: var(--noche); color: #F3EBDD; padding: calc(18px + env(safe-area-inset-top)) 20px 18px; }
+  .cab-in { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+  .logo {
+    flex: none; width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--oro);
+    display: grid; place-items: center; font-family: Georgia, serif; font-style: italic; font-weight: 700;
+    font-size: 19px; color: #F3EBDD; letter-spacing: .02em;
+  }
+  .cab h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 26px; line-height: 1.1; margin: 0; }
+  .cab p { margin: 2px 0 0; color: #D9B96A; font-size: 14px; }
+  .aviso { background: var(--arena); color: var(--suave); font-size: 13px; padding: 8px 20px; border-bottom: 1px solid var(--linea); text-align: center; }
+
+  main { max-width: 760px; margin: 0 auto; padding: 18px 16px calc(104px + env(safe-area-inset-bottom)); }
+
+  /* ---------- Navegación inferior ---------- */
+  .nav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: rgba(251, 247, 239, .96);
+    backdrop-filter: blur(8px); border-top: 1px solid var(--linea); padding-bottom: env(safe-area-inset-bottom);
+  }
+  .nav-in { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .nav button {
+    background: none; border: 0; color: var(--suave); padding: 9px 2px 8px; font-size: 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .nav svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .nav button[aria-selected="true"] { color: var(--oro-texto); font-weight: 700; }
+  .nav button[aria-selected="true"] svg { stroke: var(--oro-texto); }
+
+  /* ---------- Textos y tarjetas ---------- */
+  h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 22px; margin: 28px 0 10px; }
+  h2::after { content: ""; display: block; width: 44px; height: 2px; background: var(--oro); margin-top: 6px; }
+  h2.primero { margin-top: 4px; }
+  .nota { font-size: 13px; color: var(--suave); margin: 10px 0 0; }
+  .tarjeta-b { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 14px; padding: 16px; }
+  .bienvenida { background: var(--noche); color: #F3EBDD; border-radius: 16px; padding: 20px; margin-bottom: 8px; }
+  .bienvenida h2 { color: #F3EBDD; margin-top: 0; }
+  .bienvenida ol { margin: 8px 0 0; padding-left: 22px; color: #E6DCC8; }
+  .bienvenida li { margin: 6px 0; }
+  .vacio { text-align: center; padding: 36px 16px; }
+  .vacio p { color: var(--suave); margin: 0 0 16px; }
+
+  /* ---------- Formularios ---------- */
+  label { display: block; font-size: 15px; margin-bottom: 5px; }
+  input[type="text"] {
+    width: 100%; min-width: 0; font: inherit; font-size: 18px; padding: 11px 13px; border: 1.5px solid var(--linea);
+    border-radius: 10px; background: var(--tarjeta); color: var(--tinta);
+  }
+  input[type="text"]:focus { outline: 2px solid var(--oro); border-color: var(--oro); }
+  .fila { margin-bottom: 14px; }
+  .dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ayuda { font-size: 13px; color: var(--suave); margin: 0 0 14px; }
+  .paso { display: flex; gap: 8px; }
+  .paso input { text-align: center; }
+  .paso button {
+    flex: none; width: 46px; font-size: 22px; line-height: 1; border: 1.5px solid var(--linea); border-radius: 10px;
+    background: var(--arena); color: var(--tinta);
+  }
+  .paso button:active { background: #E6D9BE; }
+
+  .trat { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+  .trat-cab { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
+  .trat-cab b { font-family: Georgia, serif; font-weight: 400; font-size: 17px; }
+  .auto { font-size: 15px; color: var(--suave); background: var(--arena); border-radius: 10px; padding: 12px; }
+
+  .boton {
+    font-size: 17px; font-weight: 600; background: var(--oro); color: #fff; border: 0; border-radius: 12px; padding: 14px 22px;
+  }
+  .boton.grande { width: 100%; font-size: 18px; padding: 16px; }
+  .boton:active { filter: brightness(.94); }
+  .boton-sec {
+    font-size: 15px; font-weight: 600; color: var(--oro-texto); background: transparent; border: 1.5px solid var(--oro);
+    border-radius: 12px; padding: 11px 16px;
+  }
+  .boton-chico {
+    font-size: 13.5px; background: transparent; color: var(--suave); border: 1px solid var(--linea);
+    border-radius: 999px; padding: 5px 12px;
+  }
+  .boton-chico.peligro { color: var(--alerta); border-color: #E5BDB6; }
+  .acciones { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .acciones > * { flex: 1 1 auto; }
+
+  .error-caja { border: 1.5px solid var(--alerta); background: #FBEFEC; border-radius: 12px; padding: 14px 16px; margin: 16px 0; }
+  .error-caja h3 { margin: 0 0 6px; color: var(--alerta); font-size: 17px; }
+  .error-caja ul, .error-caja p { margin: 6px 0 0; padding-left: 20px; font-size: 15px; }
+  .error-caja p { padding-left: 0; }
+  .error-caja.suave { border-color: var(--oro); background: #FBF5E6; }
+  .error-caja.suave h3 { color: var(--oro-texto); }
+  .error-caja button { margin-top: 10px; }
+
+  /* ---------- Controles de clientes y simulador ---------- */
+  .control { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; }
+  .control > label { font-weight: 600; }
+  .paso-corto { max-width: 220px; }
+  input[type="range"] { width: 100%; margin: 14px 0 4px; accent-color: var(--oro); height: 28px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .chip { font-size: 14px; background: transparent; border: 1px solid var(--linea); color: var(--suave); border-radius: 999px; padding: 6px 12px; }
+  .chip.activo { background: var(--noche); border-color: var(--noche); color: #F3EBDD; }
+  .deslizador { margin-bottom: 8px; }
+  .deslizador .cabecera { display: flex; justify-content: space-between; font-size: 15px; }
+  .deslizador output { font-weight: 700; color: var(--oro-texto); }
+
+  /* ---------- Resultados ---------- */
+  .heroe { background: var(--noche); color: #F3EBDD; border-radius: 18px; padding: 20px; text-align: center; }
+  .heroe .et { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: #D9B96A; }
+  .heroe .gran { font-family: Georgia, serif; font-size: 40px; line-height: 1.15; margin: 4px 0 6px; }
+  .heroe.negativa .gran { color: #F0A89C; }
+  .heroe .sub { font-size: 14px; color: #E6DCC8; }
+  .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+  .mini { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 12px; padding: 12px 8px; text-align: center; }
+  .mini .valor { font-family: Georgia, serif; font-size: 24px; line-height: 1.1; }
+  .mini .nombre { font-size: 12.5px; color: var(--suave); margin-top: 4px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { padding: 9px 6px; text-align: right; border-bottom: 1px solid var(--linea); }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--oro-texto); font-weight: 600; font-size: 13px; }
+  tr.fuerte td { font-weight: 700; background: var(--arena); }
+  .tabla-escenarios { font-size: 13px; }
+  .tabla-escenarios th, .tabla-escenarios td { padding: 8px 3px; }
+
+  .donut-caja { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .donut { width: 150px; height: 150px; flex: none; }
+  .donut text { font-family: Georgia, serif; fill: var(--tinta); }
+  .leyenda { flex: 1 1 200px; font-size: 14px; }
+  .leyenda div { display: flex; align-items: center; gap: 8px; padding: 5px 0; }
+  .leyenda i { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+  .leyenda span { flex: 1; }
+  .leyenda b { font-weight: 600; white-space: nowrap; }
+
+  .apilada { display: flex; height: 26px; border-radius: 8px; overflow: hidden; background: var(--arena); }
+  .apilada div { height: 100%; }
+  .leyenda-h { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; font-size: 14px; }
+  .leyenda-h span { display: flex; align-items: center; gap: 6px; }
+  .leyenda-h i { width: 12px; height: 12px; border-radius: 3px; }
+
+  .grafica { width: 100%; height: auto; display: block; }
+  .grafica rect { cursor: pointer; }
+  .grafica text { font-size: 10px; fill: var(--suave); font-family: system-ui, sans-serif; }
+
+  .barra-fila { margin: 12px 0; }
+  .barra-fila .texto { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px; gap: 8px; }
+  .barra-fila .texto span:last-child { color: var(--suave); white-space: nowrap; }
+  .barra { height: 14px; background: var(--arena); border-radius: 7px; overflow: hidden; }
+  .barra > div { height: 100%; border-radius: 7px; }
+
+  .escenario-tarjeta { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
+  .escenario-tarjeta .cab-e { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .escenario-tarjeta h3 { margin: 0; font-family: Georgia, serif; font-weight: 400; font-size: 18px; }
+  .escenario-tarjeta .cli { color: var(--suave); font-size: 14px; }
+  .escenario-tarjeta .gan { font-family: Georgia, serif; font-size: 26px; margin: 4px 0; }
+  .escenario-tarjeta .gan.neg { color: var(--alerta); }
+  .escenario-tarjeta .det { font-size: 13.5px; color: var(--suave); }
+  .escenario-tarjeta .boton-chico { margin-top: 10px; }
+
+  .comparacion { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .comparacion .col { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 12px; padding: 12px; text-align: center; }
+  .comparacion .col.nuevo { background: var(--noche); border-color: var(--noche); color: #F3EBDD; }
+  .comparacion .et { font-size: 12.5px; color: var(--suave); }
+  .comparacion .nuevo .et { color: #D9B96A; }
+  .comparacion .gr { font-family: Georgia, serif; font-size: 22px; margin-top: 2px; }
+  .delta { text-align: center; font-family: Georgia, serif; font-size: 32px; margin: 16px 0 2px; }
+  .delta.pos { color: var(--salvia-osc); }
+  .delta.neg { color: var(--alerta); }
+
+  #cargando { text-align: center; padding: 70px 20px; color: var(--suave); }
+  #cargando .punto { width: 34px; height: 34px; margin: 0 auto 14px; border: 3px solid var(--linea); border-top-color: var(--oro); border-radius: 50%; animation: gira 1s linear infinite; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  footer { text-align: center; font-size: 12.5px; color: var(--suave); padding: 0 16px 20px; max-width: 760px; margin: 0 auto; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(86px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 20;
+    background: var(--noche); color: #F3EBDD; padding: 10px 18px; border-radius: 999px; font-size: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .25); max-width: 90vw; text-align: center;
+  }
+
+  @media print {
+    .nav, .cab .logo, .control, .acciones, .toast, footer, .aviso { display: none !important; }
+    .cab { background: none; color: #000; padding: 0 0 10px; }
+    .cab p { color: #333; }
+    body { background: #fff; }
+    main { padding-bottom: 0; }
+    .heroe { background: #fff; color: #000; border: 2px solid #000; }
+    .heroe .et, .heroe .sub { color: #333; }
+  }
+</style>
+</head>
+<body>
+
+<header class="cab">
+  <div class="cab-in">
+    <div class="logo" aria-hidden="true">FS</div>
+    <div>
+      <h1>Finanzas Spa</h1>
+      <p id="subtitulo">Calculadora de costos para cualquier spa</p>
+    </div>
+  </div>
+</header>
+<div class="aviso" id="aviso" hidden></div>
+
+<main>
+  <div id="cargando" role="status">
+    <div class="punto"></div>
+    <div id="mensaje-carga">Cargando Python… la primera vez puede tardar unos segundos.</div>
+  </div>
+
+  <div id="app" hidden>
+    <section id="v-spa"></section>
+    <section id="v-res" hidden></section>
+    <section id="v-esc" hidden></section>
+    <section id="v-sim" hidden></section>
+  </div>
+</main>
+
+<footer>
+  Proyecto final ADMI 1301 · Introducción a la Programación · Universidad de los Andes<br>
+  Los cálculos están escritos en Python (archivo <code>app.py</code>) y se ejecutan en su dispositivo.
+  Los datos de su spa no salen de él.
+</footer>
+
+<nav class="nav" aria-label="Secciones">
+  <div class="nav-in" role="tablist">
+    <button role="tab" id="n-spa" aria-selected="true" data-vista="spa">
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Mi spa</button>
+    <button role="tab" id="n-res" aria-selected="false" data-vista="res">
+      <svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Resultados</button>
+    <button role="tab" id="n-esc" aria-selected="false" data-vista="esc">
+      <svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg>Escenarios</button>
+    <button role="tab" id="n-sim" aria-selected="false" data-vista="sim">
+      <svg viewBox="0 0 24 24"><path d="M4 8h10M18 8h2M4 16h2M10 16h10"/><circle cx="16" cy="8" r="2"/><circle cx="8" cy="16" r="2"/></svg>¿Y si…?</button>
+  </div>
+</nav>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="pyodide/pyodide.js"></script>
+<script>
+/* Esta parte solo conecta la pantalla con el código de Python (app.py).
+   Todos los cálculos del negocio se hacen en Python. */
+
+let py = null;
+const funciones = {};
+let estado = { hay_datos: false, nombre: "", es_ejemplo: false, capacidad: 0 };
+let clientes = "";                       // clientes de la jornada (texto escrito por el usuario)
+let cache = {};                          // resultados que solo cambian si cambian los datos del spa
+let advertencias = [];
+const sim = { clientes: null, vp: 0, vi: 0, vt: 0 };
+const CLAVE = "finanzas_spa_v1";
+const $ = id => document.getElementById(id);
+
+// Llama a una función de Python y devuelve el resultado como objeto de JavaScript
+function llamar(nombre, ...argumentos) {
+  const r = funciones[nombre](...argumentos);
+  if (r !== null && typeof r === "object" && typeof r.toJs === "function") {
+    const datos = r.toJs({ dict_converter: Object.fromEntries });
+    r.destroy();
+    return datos;
+  }
+  return r;
+}
+
+// Escribe un texto de forma segura dentro del HTML (los nombres los escribe el usuario)
+function esc(texto) {
+  return String(texto).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+let temporizador = null;
+function avisar(texto) {
+  const t = $("toast");
+  t.textContent = texto; t.hidden = false;
+  clearTimeout(temporizador);
+  temporizador = setTimeout(() => { t.hidden = true; }, 2800);
+}
+
+/* ---------- Arranque ---------- */
+async function iniciar() {
+  try {
+    py = await loadPyodide({ indexURL: "pyodide/" });
+    py.runPython(await (await fetch("app.py")).text());
+    for (const n of ["configurar_spa", "borrar_datos", "estado_spa", "datos_del_spa", "datos_del_ejemplo",
+                     "consultar_jornada", "analisis_spa", "comparar_escenarios", "simular", "texto_resumen"]) {
+      funciones[n] = py.globals.get(n);
+    }
+
+    // Si el spa ya guardó sus datos en este dispositivo, se usan; si no, la app empieza vacía
+    let guardado = null;
+    try { guardado = JSON.parse(localStorage.getItem(CLAVE)); } catch (e) { guardado = null; }
+    let datosForm = null;
+    if (guardado && guardado.datos) {
+      const r = llamar("configurar_spa", JSON.stringify(guardado.datos));
+      if (r.estado === "ok") {
+        estado = r; advertencias = r.advertencias;
+        clientes = guardado.clientes || "";
+        datosForm = Object.assign({}, llamar("datos_del_spa"), { clientes });
+      } else {
+        try { localStorage.removeItem(CLAVE); } catch (e) {}
+      }
+    }
+    pintarFormulario(datosForm || formularioVacio());
+    actualizarEncabezado();
+    $("cargando").hidden = true;
+    $("app").hidden = false;
+    mostrarVista(estado.hay_datos ? "res" : "spa");
+    document.documentElement.setAttribute("data-listo", "si");
+  } catch (e) {
+    $("mensaje-carga").textContent = "No se pudo cargar Python. Revise su conexión y recargue la página.";
+    console.error(e);
+  }
+}
+
+function guardarLocal(datos) {
+  try { localStorage.setItem(CLAVE, JSON.stringify({ datos, clientes })); } catch (e) {}
+}
+function guardarClientes() {
+  try {
+    const g = JSON.parse(localStorage.getItem(CLAVE));
+    if (g) { g.clientes = clientes; localStorage.setItem(CLAVE, JSON.stringify(g)); }
+  } catch (e) {}
+}
+
+function actualizarEncabezado() {
+  $("subtitulo").textContent = estado.hay_datos ? estado.nombre : "Calculadora de costos para cualquier spa";
+  document.title = (estado.hay_datos ? estado.nombre + " · " : "") + "Finanzas Spa";
+  const av = $("aviso");
+  av.hidden = !(estado.hay_datos && estado.es_ejemplo);
+  av.textContent = "Está viendo un spa de ejemplo (ficticio). Sus cifras son supuestos de simulación, no datos reales.";
+}
+
+/* ---------- Navegación ---------- */
+const VISTAS = ["spa", "res", "esc", "sim"];
+function mostrarVista(nombre) {
+  for (const v of VISTAS) {
+    $("v-" + v).hidden = (v !== nombre);
+    $("n-" + v).setAttribute("aria-selected", v === nombre ? "true" : "false");
+  }
+  if (nombre === "res") dibujarResultados();
+  if (nombre === "esc") dibujarEscenarios();
+  if (nombre === "sim") dibujarSimulador();
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => mostrarVista(b.dataset.vista)));
+
+function sinDatos(texto) {
+  return `<div class="tarjeta-b vacio"><p>${texto}</p>
+    <button type="button" class="boton" data-accion="irspa">Escribir los datos de mi spa</button></div>`;
+}
+document.addEventListener("click", ev => {
+  const b = ev.target.closest("[data-accion='irspa']");
+  if (b) mostrarVista("spa");
+});
+
+/* ---------- Auxiliares de dibujo ---------- */
+const ORO = "#B8923A", TAUPE = "#8C7B6B", ARENA = "#BFA27A", SALVIA = "#6B8F71", ALERTA = "#9A3B2E";
+const COLORES = [ORO, SALVIA, "#B5654A", "#5F7F8F", TAUPE, "#9A7FA8"];
+
+function barra(nombre, texto, valor, maximo, color) {
+  const ancho = maximo > 0 ? Math.max(0, valor) / maximo * 100 : 0;
+  return `<div class="barra-fila">
+    <div class="texto"><span>${nombre}</span><span>${texto}</span></div>
+    <div class="barra"><div style="width:${ancho}%;background:${color}"></div></div>
+  </div>`;
+}
+
+function donut(trats) {
+  const R = 46, C = 2 * Math.PI * R;
+  let acumulado = 0;
+  const arcos = trats.map((t, i) => {
+    const largo = t.participacion_num / 100 * C;
+    const arco = `<circle cx="60" cy="60" r="${R}" fill="none" stroke="${COLORES[i % COLORES.length]}" stroke-width="22"
+      stroke-dasharray="${largo} ${C - largo}" stroke-dashoffset="${-acumulado}" transform="rotate(-90 60 60)"/>`;
+    acumulado += largo;
+    return arco;
+  }).join("");
+  return `<svg class="donut" viewBox="0 0 120 120" role="img" aria-label="Participación de cada tratamiento en los ingresos">
+    <circle cx="60" cy="60" r="${R}" fill="none" stroke="#F1E8D8" stroke-width="22"/>${arcos}
+    <text x="60" y="58" text-anchor="middle" font-size="11" style="fill:#6F6355;font-family:system-ui">Ingresos</text>
+    <text x="60" y="74" text-anchor="middle" font-size="12">por servicio</text></svg>`;
+}
+
+function graficaGanancia(curva, actual) {
+  const W = 600, H = 190, X0 = 8, X1 = 592, ARR = 14, ABA = 164;
+  const gan = curva.map(p => p.ganancia);
+  const maxV = Math.max(0, ...gan), minV = Math.min(0, ...gan);
+  const unidad = (ABA - ARR) / ((maxV - minV) || 1);      // píxeles por peso
+  const base = ARR + maxV * unidad;                       // altura de la línea del cero
+  const ancho = (X1 - X0) / curva.length;
+  let sel = 0;                                            // barra más cercana al número de clientes actual
+  curva.forEach((p, i) => { if (Math.abs(p.clientes - actual) < Math.abs(curva[sel].clientes - actual)) sel = i; });
+  const barras = curva.map((p, i) => {
+    const alto = Math.max(1.5, Math.abs(p.ganancia) * unidad);
+    const y = p.ganancia >= 0 ? base - alto : base;
+    return `<rect data-n="${p.clientes}" x="${X0 + i * ancho + ancho * 0.12}" y="${y}" width="${ancho * 0.76}" height="${alto}" rx="2"
+      fill="${p.ganancia >= 0 ? SALVIA : ALERTA}" ${i === sel ? `stroke="#2E2620" stroke-width="2"` : `opacity=".75"`}>
+      <title>${p.clientes} clientes: ${p.ganancia_texto}</title></rect>`;
+  }).join("");
+  const etiqueta = (i, ancla) => `<text x="${X0 + i * ancho + ancho / 2}" y="${H - 6}" text-anchor="${ancla}">${curva[i].clientes}</text>`;
+  const medio = (curva.length > 2 && sel !== 0 && sel !== curva.length - 1) ? etiqueta(sel, "middle") : "";
+  return `<svg class="grafica" viewBox="0 0 ${W} ${H}" role="img" aria-label="Ganancia operativa según el número de clientes">
+    <line x1="${X0}" x2="${X1}" y1="${base}" y2="${base}" stroke="#BFA27A" stroke-width="1"/>
+    ${barras}${etiqueta(0, "start")}${medio}${etiqueta(curva.length - 1, "end")}</svg>`;
+}
+
+function analisis() {
+  if (!cache.analisis) cache.analisis = llamar("analisis_spa");
+  return cache.analisis;
+}
+function escenarios() {
+  if (!cache.esc) cache.esc = llamar("comparar_escenarios");
+  return cache.esc.escenarios;
+}
+function clientesValidos() {
+  const n = parseInt(clientes, 10);
+  return Number.isFinite(n) && n >= 1 ? n : 0;
+}
+function limitar(n, a, b) { return Math.min(Math.max(n, a), b); }
+
+/* ---------- Pestaña: Mi spa (formulario) ---------- */
+const CAMPOS = [
+  { clave: "clientes_por_terapeuta", etiqueta: "Clientes que atiende un terapeuta por turno", ej: "Ej: 3", paso: true },
+  { clave: "clientes_por_recepcion", etiqueta: "Clientes por persona de recepción/apoyo", ej: "Ej: 10", paso: true },
+  { clave: "costo_turno_terapeuta", etiqueta: "Costo de un turno de terapeuta (COP)", ej: "Ej: 200.000", paso: false },
+  { clave: "costo_turno_recepcion", etiqueta: "Costo de un turno de recepción/apoyo (COP)", ej: "Ej: 120.000", paso: false },
+  { clave: "cabinas", etiqueta: "Cabinas de tratamiento", ej: "Ej: 8", paso: true },
+];
+const EJ_TRAT = ["Ej: Masaje relajante", "Ej: Facial hidratante", "Ej: Ritual corporal"];
+const MAX_TRAT = 6;
+
+function formularioVacio() {
+  return { nombre: "", clientes: "", tratamientos: [
+    { nombre: "", precio: "", insumos: "", porcentaje: "" },
+    { nombre: "", precio: "", insumos: "", porcentaje: "" } ] };
+}
+function val(d, clave) { return esc(d[clave] === undefined || d[clave] === null ? "" : d[clave]); }
+
+function campoNumerico(id, etiqueta, ej, valor, conPaso) {
+  const entrada = `<input type="text" id="${id}" inputmode="numeric" placeholder="${ej}" value="${valor}">`;
+  const cuerpo = conPaso
+    ? `<div class="paso"><button type="button" data-paso="-1" data-para="${id}" aria-label="Restar uno">−</button>${entrada}
+         <button type="button" data-paso="1" data-para="${id}" aria-label="Sumar uno">+</button></div>`
+    : entrada;
+  return `<div class="fila"><label for="${id}">${etiqueta}</label>${cuerpo}</div>`;
+}
+
+function pintarFormulario(d) {
+  const campos = CAMPOS.map(c => campoNumerico("f-" + c.clave, c.etiqueta, c.ej, val(d, c.clave), c.paso)).join("");
+  const trats = d.tratamientos.map((t, i) => `
+    <div class="trat">
+      <div class="trat-cab"><b>Tratamiento ${i + 1}</b>
+        <span>
+          ${d.tratamientos.length < MAX_TRAT ? `<button type="button" class="boton-chico" data-duplicar="${i}">Duplicar</button>` : ""}
+          ${d.tratamientos.length > 1 ? `<button type="button" class="boton-chico" data-quitar="${i}">Quitar</button>` : ""}
+        </span>
+      </div>
+      <div class="fila"><label>Nombre</label>
+        <input type="text" class="t-nombre" maxlength="40" placeholder="${EJ_TRAT[i] || "Ej: Otro tratamiento"}" value="${val(t, "nombre")}"></div>
+      <div class="dos-col fila">
+        <div><label>Precio por cliente (COP)</label>
+          <input type="text" class="t-precio" inputmode="numeric" placeholder="Ej: 200.000" value="${val(t, "precio")}"></div>
+        <div><label>Insumos por cliente (COP)</label>
+          <input type="text" class="t-insumos" inputmode="numeric" placeholder="Ej: 30.000" value="${val(t, "insumos")}"></div>
+      </div>
+      ${i === 0
+        ? `<label>Porcentaje de clientes que lo piden</label><div class="auto">El resto de los clientes (se calcula solo)</div>`
+        : `<label>Porcentaje de clientes que lo piden (0 a 100)</label>
+           <input type="text" class="t-pct" inputmode="numeric" placeholder="Ej: 30" value="${val(t, "porcentaje")}">`}
+    </div>`).join("");
+
+  $("v-spa").innerHTML = `
+    ${estado.hay_datos ? "" : `<div class="bienvenida">
+      <h2>Calcule los costos de su jornada</h2>
+      <ol><li>Escriba los datos de su spa: personal, cabinas y tratamientos.</li>
+          <li>Diga cuántos clientes espera hoy.</li>
+          <li>Pulse <b>Calcular</b> y vea costos, ganancia y escenarios.</li></ol>
+      <div class="acciones"><button type="button" class="boton-sec" style="color:#D9B96A;border-color:#D9B96A" data-f="ejemplo">Cargar un ejemplo</button></div>
+    </div>`}
+    <form id="form-spa" autocomplete="off" novalidate>
+      <h2 class="primero">Su spa</h2>
+      <div class="fila"><label for="f-nombre">Nombre del spa</label>
+        <input type="text" id="f-nombre" maxlength="40" placeholder="Ej: Mi Spa Bogotá" value="${val(d, "nombre")}"></div>
+
+      <h2>Personal y capacidad</h2>
+      ${campos}
+      <p class="ayuda">La capacidad máxima de la jornada es cabinas × clientes por terapeuta.</p>
+
+      <h2>Tratamientos</h2>
+      <p class="ayuda">El primer tratamiento recibe el resto de los clientes; en los demás escriba qué porcentaje de los clientes lo pide.</p>
+      ${trats}
+      ${d.tratamientos.length < MAX_TRAT ? `<button type="button" class="boton-sec" data-f="agregar">+ Agregar tratamiento</button>` : ""}
+
+      <h2>La jornada</h2>
+      ${campoNumerico("f-clientes", "¿Cuántos clientes espera?", "Ej: 15", val(d, "clientes"), true)}
+
+      <div id="mensajes" aria-live="polite"></div>
+      <button type="submit" class="boton grande">Calcular mi jornada</button>
+      <div class="acciones">
+        <button type="button" class="boton-sec" data-f="ejemplo">Cargar ejemplo</button>
+        <button type="button" class="boton-sec" data-f="limpiar" id="b-limpiar">Limpiar todo</button>
+      </div>
+    </form>`;
+}
+
+function leerFormulario() {
+  const f = $("v-spa");
+  const d = { nombre: f.querySelector("#f-nombre").value, clientes: f.querySelector("#f-clientes").value };
+  CAMPOS.forEach(c => { d[c.clave] = f.querySelector("#f-" + c.clave).value; });
+  d.tratamientos = [...f.querySelectorAll(".trat")].map((el, i) => ({
+    nombre: el.querySelector(".t-nombre").value,
+    precio: el.querySelector(".t-precio").value,
+    insumos: el.querySelector(".t-insumos").value,
+    porcentaje: i === 0 ? "" : el.querySelector(".t-pct").value,
+  }));
+  return d;
+}
+
+let confirmaLimpiar = null;
+$("v-spa").addEventListener("click", ev => {
+  const b = ev.target.closest("button");
+  if (!b) return;
+
+  if (b.dataset.paso) {                                 // botones − y +
+    const inp = $(b.dataset.para);
+    let n = parseInt(String(inp.value).replace(/\D/g, ""), 10);
+    if (!Number.isFinite(n)) n = 0;
+    inp.value = Math.max(0, n + Number(b.dataset.paso));
+  } else if (b.dataset.f === "agregar") {
+    const d = leerFormulario();
+    d.tratamientos.push({ nombre: "", precio: "", insumos: "", porcentaje: "" });
+    pintarFormulario(d);
+  } else if (b.dataset.quitar !== undefined) {
+    const d = leerFormulario();
+    d.tratamientos.splice(Number(b.dataset.quitar), 1);
+    pintarFormulario(d);
+  } else if (b.dataset.duplicar !== undefined) {
+    const d = leerFormulario();
+    const i = Number(b.dataset.duplicar);
+    const copia = Object.assign({}, d.tratamientos[i]);
+    copia.nombre = copia.nombre ? copia.nombre + " (copia)" : "";
+    d.tratamientos.splice(i + 1, 0, copia);
+    pintarFormulario(d);
+  } else if (b.dataset.f === "ejemplo") {
+    pintarFormulario(llamar("datos_del_ejemplo"));
+    avisar("Ejemplo cargado. Revise los datos y pulse Calcular.");
+    window.scrollTo(0, 0);
+  } else if (b.dataset.f === "limpiar") {
+    if (confirmaLimpiar === null) {
+      b.textContent = "¿Seguro? Toque otra vez";
+      confirmaLimpiar = setTimeout(() => { confirmaLimpiar = null; const x = $("b-limpiar"); if (x) x.textContent = "Limpiar todo"; }, 3000);
+      return;
+    }
+    clearTimeout(confirmaLimpiar); confirmaLimpiar = null;
+    try { localStorage.removeItem(CLAVE); } catch (e) {}
+    estado = llamar("borrar_datos"); cache = {}; advertencias = []; clientes = "";
+    sim.clientes = null; sim.vp = sim.vi = sim.vt = 0;
+    pintarFormulario(formularioVacio());
+    actualizarEncabezado();
+    avisar("Datos borrados. La app quedó vacía.");
+    window.scrollTo(0, 0);
+  }
+});
+
+$("v-spa").addEventListener("submit", ev => {
+  ev.preventDefault();
+  const datos = leerFormulario();
+  const { clientes: textoClientes, ...datosSpa } = datos;
+  const r = llamar("configurar_spa", JSON.stringify(datosSpa));
+  const caja = $("mensajes");
+
+  if (r.estado === "error") {
+    caja.innerHTML = `<div class="error-caja" role="alert"><h3>Revise estos datos</h3>
+      <ul>${r.mensajes.map(m => `<li>${esc(m)}</li>`).join("")}</ul></div>`;
+    caja.scrollIntoView({ block: "center" });
+    return;
+  }
+
+  const prueba = llamar("consultar_jornada", textoClientes);
+  estado = r; advertencias = r.advertencias; cache = {};
+  clientes = String(textoClientes).trim();
+  sim.clientes = null;
+  guardarLocal(datosSpa);
+  actualizarEncabezado();
+  if (prueba.estado === "error") {
+    caja.innerHTML = `<div class="error-caja" role="alert"><h3>Falta un dato</h3><p>${esc(prueba.mensaje)}</p></div>`;
+    caja.scrollIntoView({ block: "center" });
+    return;
+  }
+  avisar("Datos guardados en este dispositivo");
+  mostrarVista("res");
+});
+
+/* ---------- Pestaña: Resultados ---------- */
+function dibujarResultados() {
+  const cont = $("v-res");
+  if (!estado.hay_datos) { cont.innerHTML = sinDatos("Aún no hay datos. Escriba los de su spa para ver costos y ganancia."); return; }
+
+  const cap = estado.capacidad;
+  const chips = escenarios().map(e =>
+    `<button type="button" class="chip" data-n="${e.clientes}">${e.escenario} · ${e.clientes}</button>`).join("");
+  cont.innerHTML = `
+    <div class="control">
+      <label for="r-clientes">Clientes de la jornada</label>
+      <div class="paso paso-corto">
+        <button type="button" data-delta="-1" aria-label="Un cliente menos">−</button>
+        <input type="text" id="r-clientes" inputmode="numeric" value="${esc(clientes)}">
+        <button type="button" data-delta="1" aria-label="Un cliente más">+</button>
+      </div>
+      <input type="range" id="r-slider" min="1" max="${cap}" value="${limitar(clientesValidos() || 1, 1, cap)}" aria-label="Clientes de la jornada">
+      <div class="chips">${chips}</div>
+    </div>
+    ${advertencias.length ? `<div class="error-caja suave"><h3>Tenga en cuenta</h3><ul>${advertencias.map(m => `<li>${esc(m)}</li>`).join("")}</ul></div>` : ""}
+    <div id="r-cuerpo" aria-live="polite"></div>`;
+  marcarChips();
+  dibujarCuerpoResultados();
+}
+
+function cambiarClientes(texto, desdeSlider) {
+  clientes = String(texto);
+  guardarClientes();
+  if (!desdeSlider) {
+    const n = clientesValidos();
+    if (n) $("r-slider").value = limitar(n, 1, estado.capacidad);
+  } else {
+    $("r-clientes").value = clientes;
+  }
+  marcarChips();
+  dibujarCuerpoResultados();
+}
+function marcarChips() {
+  document.querySelectorAll("#v-res .chip").forEach(c => c.classList.toggle("activo", c.dataset.n === String(clientes).trim()));
+}
+
+function dibujarCuerpoResultados() {
+  const cont = $("r-cuerpo");
+  const d = llamar("consultar_jornada", clientes);
+
+  if (d.estado === "error") { cont.innerHTML = `<p class="error-caja" role="alert">${esc(d.mensaje)}</p>`; return; }
+
+  if (d.estado === "no_viable") {
+    cont.innerHTML = `<div class="error-caja" role="alert">
+      <h3>No se puede atender esta demanda</h3>
+      <p>Para ${d.clientes} clientes, el spa no tiene capacidad. La capacidad máxima es de
+         <b>${d.capacidad_maxima} clientes</b> por jornada (${d.cabinas} cabinas × ${d.clientes_por_terapeuta} clientes por terapeuta).</p>
+      <p>Quedarían sin atender <b>${d.sin_atender}</b> de ${d.clientes} clientes.</p>
+      <p>No se muestran costos, ingresos ni ganancia, porque esta operación no es viable con la infraestructura disponible.</p>
+      <button type="button" class="boton" data-max="${d.capacidad_maxima}">Usar la capacidad máxima (${d.capacidad_maxima})</button>
+    </div>`;
+    return;
+  }
+
+  const a = analisis();
+  const negativa = d.ganancia_num < 0;
+  const b = d.barra_costos;
+  const filasTrat = d.tratamientos.map(t =>
+    `<tr><td>${esc(t.nombre)}</td><td>${t.clientes}</td><td>${t.ingresos}</td></tr>`).join("");
+  const leyenda = d.tratamientos.map((t, i) =>
+    `<div><i style="background:${COLORES[i % COLORES.length]}"></i><span>${esc(t.nombre)}</span><b>${t.participacion}</b></div>`).join("");
+
+  cont.innerHTML = `
+    <div class="heroe ${negativa ? "negativa" : ""}">
+      <div class="et">Ganancia operativa</div>
+      <div class="gran">${d.ganancia}</div>
+      <div class="sub">Margen sobre ingresos ${d.margen} · Utilización de terapeutas ${d.utilizacion}</div>
+    </div>
+    <div class="mini-grid">
+      <div class="mini"><div class="valor">${d.clientes}</div><div class="nombre">Clientes</div></div>
+      <div class="mini"><div class="valor">${d.terapeutas}</div><div class="nombre">Terapeutas</div></div>
+      <div class="mini"><div class="valor">${d.recepcion}</div><div class="nombre">Recepción y apoyo</div></div>
+    </div>
+
+    <h2>Ingresos por tratamiento</h2>
+    <div class="tarjeta-b donut-caja">${donut(d.tratamientos)}<div class="leyenda">${leyenda}</div></div>
+    <table style="margin-top:8px">
+      <tr><th>Tratamiento</th><th>Clientes</th><th>Ingresos</th></tr>
+      ${filasTrat}
+      <tr class="fuerte"><td>Ingresos totales</td><td>${d.clientes}</td><td>${d.ingresos_total}</td></tr>
+    </table>
+
+    <h2>Costos de la jornada</h2>
+    <div class="apilada" role="img" aria-label="Reparto entre costo de personal, insumos y ganancia">
+      <div style="width:${b.personal}%;background:${TAUPE}"></div>
+      <div style="width:${b.insumos}%;background:${ARENA}"></div>
+      <div style="width:${b.ganancia}%;background:${SALVIA}"></div>
+    </div>
+    <div class="leyenda-h">
+      <span><i style="background:${TAUPE}"></i>Personal ${d.costo_personal}</span>
+      <span><i style="background:${ARENA}"></i>Insumos ${d.costo_insumos}</span>
+      <span><i style="background:${SALVIA}"></i>Ganancia ${negativa ? "$0" : d.ganancia}</span>
+    </div>
+    ${negativa ? `<p class="nota" style="color:var(--alerta)">Los costos (${d.costos_totales}) superan a los ingresos (${d.ingresos_total}): hay pérdida operativa.</p>` : ""}
+    <table style="margin-top:8px">
+      <tr><td>Costo de personal (turnos)</td><td>${d.costo_personal}</td></tr>
+      <tr><td>Costo de insumos</td><td>${d.costo_insumos}</td></tr>
+      <tr class="fuerte"><td>Costos totales</td><td>${d.costos_totales}</td></tr>
+    </table>
+
+    <h2>Ganancia según el número de clientes</h2>
+    <div class="tarjeta-b">${graficaGanancia(a.curva, d.clientes)}
+      <p class="nota" style="text-align:center">Toque una barra para ver esa jornada. Verde: ganancia · Rojo: pérdida.</p></div>
+    <p style="margin:12px 0 0"><b>${esc(a.texto_equilibrio)}</b></p>
+
+    <div class="acciones" style="margin-top:20px">
+      <button type="button" class="boton-sec" data-accion="copiar">Copiar resumen</button>
+      <button type="button" class="boton-sec" data-accion="imprimir">Imprimir / guardar PDF</button>
+    </div>
+    <p class="nota">La ganancia es operativa: incluye solo personal e insumos; no incluye arriendo, servicios públicos ni impuestos.
+      ${estado.es_ejemplo ? "Cifras del ejemplo: supuestos de simulación." : "Estimación con los datos escritos por el spa."}</p>`;
+}
+
+$("v-res").addEventListener("input", ev => {
+  if (ev.target.id === "r-slider") cambiarClientes(ev.target.value, true);
+  if (ev.target.id === "r-clientes") cambiarClientes(ev.target.value, false);
+});
+$("v-res").addEventListener("click", ev => {
+  const b = ev.target.closest("button, rect");
+  if (!b) return;
+  if (b.dataset.delta) {
+    const n = (clientesValidos() || 0) + Number(b.dataset.delta);
+    cambiarClientes(String(Math.max(1, n)), false);
+    $("r-clientes").value = clientes;
+  } else if (b.dataset.n) {
+    cambiarClientes(b.dataset.n, false); $("r-clientes").value = clientes;
+  } else if (b.dataset.max) {
+    cambiarClientes(b.dataset.max, false); $("r-clientes").value = clientes;
+  } else if (b.dataset.accion === "imprimir") {
+    window.print();
+  } else if (b.dataset.accion === "copiar") {
+    const texto = llamar("texto_resumen", clientes);
+    const listo = () => avisar("Resumen copiado");
+    const respaldo = () => {
+      const t = document.createElement("textarea"); t.value = texto; document.body.appendChild(t); t.select();
+      try { document.execCommand("copy"); listo(); } catch (e) { avisar("No se pudo copiar"); }
+      t.remove();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(listo, respaldo);
+    else respaldo();
+  }
+});
+/* ---------- Pestaña: Escenarios ---------- */
+function dibujarEscenarios() {
+  const cont = $("v-esc");
+  if (!estado.hay_datos) { cont.innerHTML = sinDatos("Escriba los datos de su spa para comparar escenarios."); return; }
+  const lista = escenarios();
+  const maxIng = Math.max(...lista.map(e => e.ingresos_total_num), 1);
+
+  const tarjetas = lista.map(e => `
+    <div class="escenario-tarjeta">
+      <div class="cab-e"><h3>${e.escenario}</h3><span class="cli">${e.clientes} clientes</span></div>
+      <div class="gan ${e.ganancia_num < 0 ? "neg" : ""}">${e.ganancia}</div>
+      <div class="det">Ganancia operativa · margen ${e.margen} · ${e.terapeutas} terapeutas y ${e.recepcion} de recepción</div>
+      <button type="button" class="boton-chico" data-ver="${e.clientes}">Ver el detalle de esta jornada</button>
+    </div>`).join("");
+
+  const fila = (nombre, campo, clase) =>
+    `<tr${clase ? ` class="${clase}"` : ""}><td>${nombre}</td>${lista.map(e => `<td>${e[campo]}</td>`).join("")}</tr>`;
+  const grupos = lista.map(e => `<div style="margin-top:16px"><div style="font-size:15px;color:var(--oro-texto)"><b>${e.escenario}</b> (${e.clientes} clientes)</div>
+      ${barra("Ingresos", e.ingresos_total, e.ingresos_total_num, maxIng, ORO)}
+      ${barra("Costos totales", e.costos_totales, e.costos_totales_num, maxIng, TAUPE)}
+      ${barra("Ganancia", e.ganancia, e.ganancia_num, maxIng, SALVIA)}</div>`).join("");
+
+  cont.innerHTML = `
+    <h2 class="primero">Tres jornadas posibles</h2>
+    <p class="nota" style="margin-top:0">Un tercio, dos tercios y el total de la capacidad máxima (${estado.capacidad} clientes).</p>
+    <div style="margin-top:12px">${tarjetas}</div>
+    <h2>Comparación</h2>
+    <table class="tabla-escenarios">
+      <tr><th></th>${lista.map(e => `<th>${e.escenario}</th>`).join("")}</tr>
+      ${fila("Clientes", "clientes")}${fila("Terapeutas", "terapeutas")}${fila("Recepción/apoyo", "recepcion")}
+      ${fila("Costo de personal", "costo_personal")}${fila("Costo de insumos", "costo_insumos")}
+      ${fila("Ingresos totales", "ingresos_total")}${fila("Ganancia operativa", "ganancia", "fuerte")}
+      ${fila("Margen sobre ingresos", "margen")}${fila("Utilización de terapeutas", "utilizacion")}
+    </table>
+    <p class="nota">COP por jornada. Los tres escenarios usan la misma función y los mismos datos.</p>
+    <h2>Ingresos, costos y ganancia</h2>${grupos}`;
+}
+$("v-esc").addEventListener("click", ev => {
+  const b = ev.target.closest("[data-ver]");
+  if (!b) return;
+  clientes = b.dataset.ver; guardarClientes();
+  mostrarVista("res");
+});
+
+/* ---------- Pestaña: ¿Y si…? (simulador) ---------- */
+function etiquetaVar(v) { return (v > 0 ? "+" : "") + v + " %"; }
+
+function dibujarSimulador() {
+  const cont = $("v-sim");
+  if (!estado.hay_datos) { cont.innerHTML = sinDatos("Escriba los datos de su spa para simular cambios en precios, insumos o turnos."); return; }
+  const cap = estado.capacidad;
+  if (sim.clientes === null) sim.clientes = limitar(clientesValidos() || Math.max(1, Math.round(cap / 2)), 1, cap);
+
+  const desliza = (id, titulo, v) => `<div class="deslizador">
+    <div class="cabecera"><label for="${id}" style="margin:0">${titulo}</label><output id="o-${id}">${etiquetaVar(v)}</output></div>
+    <input type="range" id="${id}" min="-30" max="50" step="1" value="${v}"></div>`;
+
+  cont.innerHTML = `
+    <h2 class="primero">¿Y si cambian los costos o los precios?</h2>
+    <p class="nota" style="margin-top:0">Mueva los deslizadores y compare con su jornada actual. Es solo una simulación: no cambia sus datos.</p>
+    <div class="control" style="margin-top:12px">
+      <div class="deslizador">
+        <div class="cabecera"><label for="s-clientes" style="margin:0">Clientes de la jornada</label><output id="o-s-clientes">${sim.clientes}</output></div>
+        <input type="range" id="s-clientes" min="1" max="${cap}" step="1" value="${sim.clientes}">
+      </div>
+      ${desliza("s-vp", "Precios de los tratamientos", sim.vp)}
+      ${desliza("s-vi", "Costo de los insumos", sim.vi)}
+      ${desliza("s-vt", "Costo de los turnos del personal", sim.vt)}
+      <div class="chips">
+        <button type="button" class="chip" data-pre="precios10">Precios +10 %</button>
+        <button type="button" class="chip" data-pre="insumos15">Insumos +15 %</button>
+        <button type="button" class="chip" data-pre="turnos10">Turnos +10 %</button>
+        <button type="button" class="chip" data-pre="reset">Restablecer</button>
+      </div>
+    </div>
+    <div id="s-cuerpo" aria-live="polite"></div>`;
+  dibujarCuerpoSimulador();
+}
+
+function dibujarCuerpoSimulador() {
+  const r = llamar("simular", sim.clientes, sim.vp, sim.vi, sim.vt);
+  const cont = $("s-cuerpo");
+  if (r.estado !== "ok") { cont.innerHTML = `<p class="error-caja">${esc(r.mensaje || "No se pudo simular.")}</p>`; return; }
+  const b = r.base, n = r.ajustado;
+  const hayCambio = sim.vp !== 0 || sim.vi !== 0 || sim.vt !== 0;
+  const clase = r.diferencia_num > 0 ? "pos" : (r.diferencia_num < 0 ? "neg" : "");
+  const fila = (nombre, campo, fuerte) =>
+    `<tr${fuerte ? ` class="fuerte"` : ""}><td>${nombre}</td><td>${b[campo]}</td><td>${n[campo]}</td></tr>`;
+
+  cont.innerHTML = `
+    <div class="comparacion">
+      <div class="col"><div class="et">Ganancia actual</div><div class="gr">${b.ganancia}</div></div>
+      <div class="col nuevo"><div class="et">Con los cambios</div><div class="gr">${n.ganancia}</div></div>
+    </div>
+    <div class="delta ${clase}">${r.diferencia}</div>
+    <div class="nota" style="text-align:center;margin-top:0">${hayCambio ? "de diferencia en la ganancia operativa" : "Mueva un deslizador para ver el efecto"}</div>
+    <table style="margin-top:14px">
+      <tr><th></th><th>Actual</th><th>Con cambios</th></tr>
+      ${fila("Ingresos totales", "ingresos_total")}${fila("Costo de personal", "costo_personal")}
+      ${fila("Costo de insumos", "costo_insumos")}${fila("Ganancia operativa", "ganancia", true)}${fila("Margen", "margen")}
+    </table>
+    <h2>Punto de equilibrio</h2>
+    <p style="margin:0 0 8px"><b>Actual:</b> ${esc(r.equilibrio_base)}</p>
+    <p style="margin:0"><b>Con cambios:</b> ${esc(r.equilibrio_ajustado)}</p>`;
+}
+
+$("v-sim").addEventListener("input", ev => {
+  const id = ev.target.id;
+  if (!id) return;
+  const v = Number(ev.target.value);
+  if (id === "s-clientes") { sim.clientes = v; $("o-s-clientes").textContent = v; }
+  else if (id === "s-vp") { sim.vp = v; $("o-s-vp").textContent = etiquetaVar(v); }
+  else if (id === "s-vi") { sim.vi = v; $("o-s-vi").textContent = etiquetaVar(v); }
+  else if (id === "s-vt") { sim.vt = v; $("o-s-vt").textContent = etiquetaVar(v); }
+  else return;
+  dibujarCuerpoSimulador();
+});
+$("v-sim").addEventListener("click", ev => {
+  const b = ev.target.closest("[data-pre]");
+  if (!b) return;
+  if (b.dataset.pre === "reset") { sim.vp = sim.vi = sim.vt = 0; }
+  if (b.dataset.pre === "precios10") sim.vp = 10;
+  if (b.dataset.pre === "insumos15") sim.vi = 15;
+  if (b.dataset.pre === "turnos10") sim.vt = 10;
+  dibujarSimulador();
+});
+
+/* ---------- Instalación y uso sin internet ---------- */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+
+iniciar();
+</script>
+</body>
+</html>
