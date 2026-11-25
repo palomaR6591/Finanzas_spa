@@ -8,7 +8,7 @@ Proyecto final de **ADMI 1301 · Introducción a la Programación** (Universidad
 
 <p align="center"><img src="icons/logo.svg" alt="Logo de Finanzas Spa: una flor de loto cuyos pétalos suben como las barras de una gráfica" width="96"></p>
 
-*El logo es una flor de loto (spa) cuyos pétalos van subiendo como las barras de una gráfica (finanzas). Los colores son una paleta neutra cálida: marfil, champagne, nuez, tostado y cacao.*
+*El logo es una flor de loto (spa) cuyos pétalos van subiendo como las barras de una gráfica (finanzas). Los colores son una paleta violeta (de #6d00a1 a #cb9bde) sobre fondo crema y blanco.*
 
 ## Abrir la app
 

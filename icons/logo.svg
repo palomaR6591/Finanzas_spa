@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Logo de Finanzas Spa: una flor de loto cuyos pétalos suben como las barras de una gráfica">
   <g transform="translate(50 80)">
-    <path transform="rotate(-58) scale(.66)" fill="#D3B28D" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
-    <path transform="rotate(58) scale(.66)" fill="#D3B28D" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
-    <path transform="rotate(-29) scale(.86)" fill="#C79D6A" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
-    <path transform="rotate(29) scale(.86)" fill="#C79D6A" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
-    <path fill="#6F4E37" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+    <path transform="rotate(-58) scale(.66)" fill="#cb9bde" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+    <path transform="rotate(58) scale(.66)" fill="#cb9bde" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+    <path transform="rotate(-29) scale(.86)" fill="#af69cd" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+    <path transform="rotate(29) scale(.86)" fill="#af69cd" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
+    <path fill="#6d00a1" d="M0 0C-15-12-15-42 0-60C15-42 15-12 0 0Z"/>
   </g>
-  <path d="M18 85Q50 93 82 85" fill="none" stroke="#C79D6A" stroke-width="3" stroke-linecap="round"/>
+  <path d="M18 85Q50 93 82 85" fill="none" stroke="#af69cd" stroke-width="3" stroke-linecap="round"/>
     </svg>
