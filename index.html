@@ -6,6 +6,10 @@
 <title>Finanzas Spa · Calculadora de costos</title>
 <meta name="description" content="Finanzas Spa: calculadora de costos y ganancia operativa de la jornada para cualquier spa. Cada spa escribe sus propios datos. Proyecto final ADMI 1301.">
 <meta name="theme-color" content="#E6D7B8">
+<!-- La app solo tiene tema claro: evita que el navegador o extensiones la oscurezcan automáticamente -->
+<meta name="color-scheme" content="only light">
+<meta name="supported-color-schemes" content="light">
+<meta name="darkreader-lock">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -33,6 +37,7 @@
     --linea: #DDD0B6;
     --tarjeta: #FFFCF4;
   }
+  html { color-scheme: only light; background: #F6F0E0; }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
