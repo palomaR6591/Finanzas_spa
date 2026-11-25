@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Finanzas Spa · Calculadora de costos</title>
 <meta name="description" content="Finanzas Spa: calculadora de costos y ganancia operativa de la jornada para cualquier spa. Cada spa escribe sus propios datos. Proyecto final ADMI 1301.">
-<meta name="theme-color" content="#9032bb">
+<meta name="theme-color" content="#a04ec4">
 <!-- La app solo tiene tema claro: evita que el navegador o extensiones la oscurezcan automáticamente -->
 <meta name="color-scheme" content="only light">
 <meta name="supported-color-schemes" content="light">
@@ -17,26 +17,26 @@
 <meta name="apple-mobile-web-app-title" content="Finanzas Spa">
 <style>
   :root {
-    /* Paleta violeta: #6d00a1, #7900ac, #9032bb, #af69cd y #cb9bde. Fondo de la página: #9032bb; tarjetas en blanco */
+    /* Paleta violeta: #6d00a1, #7900ac, #9032bb, #af69cd y #cb9bde. Fondo de la página: #a04ec4 (un poco más claro que lila-3); casillas y tarjetas en lila-5 */
     --lila-1: #6d00a1;
     --lila-2: #7900ac;
     --lila-3: #9032bb;
     --lila-4: #af69cd;
     --lila-5: #cb9bde;
-    --fondo: #9032bb;       /* fondo de la página (lila-3) */
-    --arena: #F1EDE8;
-    --tarjeta: #FFFFFF;
+    --fondo: #a04ec4;       /* fondo de la página */
+    --arena: #E0BDEC;       /* lila muy claro: botones +/−, filas destacadas */
+    --tarjeta: #cb9bde;     /* casillas y tarjetas (lila-5) */
     --tinta: #26212B;
-    --suave: #5E5566;
+    --suave: #3B3043;
     --acento: var(--lila-2);
     --acento-texto: var(--lila-1);
     --salvia: #5F8F66;      /* ganancia */
     --salvia-osc: #3F7A4E;
     --alerta: #B03A2E;      /* pérdida */
     --noche: var(--lila-1);
-    --linea: #E4DFE6;
+    --linea: #b27fcc;
   }
-  html { color-scheme: only light; background: #9032bb; }
+  html { color-scheme: only light; background: #a04ec4; }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
@@ -59,7 +59,7 @@
          /* Sobre el fondo morado el texto suelto es blanco; las tarjetas (fondo blanco) vuelven a los tonos oscuros */
          --tinta: #FFFFFF; --suave: rgba(255, 255, 255, .92); --acento-texto: #FFFFFF; color: var(--tinta); }
   .tarjeta-b, .trat, .control, .mini, .escenario-tarjeta, .comparacion .col, .error-caja, .bienvenida, table {
-    --tinta: #26212B; --suave: #5E5566; --acento-texto: #6d00a1; --boton-fondo: #7900ac; --boton-texto: #FFFFFF; color: var(--tinta);
+    --tinta: #26212B; --suave: #3B3043; --acento-texto: #6d00a1; --boton-fondo: #7900ac; --boton-texto: #FFFFFF; color: var(--tinta);
   }
 
   /* ---------- Navegación inferior ---------- */
@@ -93,10 +93,11 @@
   /* ---------- Formularios ---------- */
   label { display: block; font-size: 15px; margin-bottom: 5px; }
   input[type="text"] {
-    width: 100%; min-width: 0; font: inherit; font-size: 18px; padding: 11px 13px; border: 1.5px solid var(--linea);
-    border-radius: 10px; background: var(--tarjeta); color: var(--tinta);
+    width: 100%; min-width: 0; font: inherit; font-size: 18px; padding: 11px 13px; border: 1.5px solid var(--lila-3);
+    border-radius: 10px; background: var(--tarjeta); color: #26212B;
   }
-  input[type="text"]:focus { outline: 2px solid var(--lila-1); border-color: var(--lila-1); box-shadow: 0 0 0 5px rgba(255, 255, 255, .85); }
+  input[type="text"]::placeholder { color: #6B5675; opacity: 1; }
+  input[type="text"]:focus { outline: 2px solid var(--lila-1); border-color: var(--lila-1); box-shadow: 0 0 0 4px rgba(255, 255, 255, .85); }
   .fila { margin-bottom: 14px; }
   .dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .ayuda { font-size: 13px; color: var(--suave); margin: 0 0 14px; }
@@ -104,7 +105,7 @@
   .paso input { text-align: center; }
   .paso button {
     flex: none; width: 46px; font-size: 22px; line-height: 1; border: 1.5px solid var(--linea); border-radius: 10px;
-    background: var(--arena); color: var(--tinta);
+    background: var(--arena); color: #26212B;
   }
   .paso button:active { background: var(--lila-5); }
 
@@ -134,7 +135,7 @@
   .error-caja h3 { margin: 0 0 6px; color: var(--alerta); font-size: 17px; }
   .error-caja ul, .error-caja p { margin: 6px 0 0; padding-left: 20px; font-size: 15px; }
   .error-caja p { padding-left: 0; }
-  .error-caja.suave { border-color: var(--lila-4); background: #F7F1FA; }
+  .error-caja.suave { border-color: var(--lila-3); background: var(--arena); }
   .error-caja.suave h3 { color: var(--acento-texto); }
   .error-caja button { margin-top: 10px; }
 
@@ -421,8 +422,8 @@ document.addEventListener("click", ev => {
 
 /* ---------- Auxiliares de dibujo ---------- */
 const INGRESO = "#9032bb", COSTO = "#6d00a1", CLARO = "#cb9bde", SALVIA = "#5F8F66", ALERTA = "#B03A2E";
-// Colores de los tratamientos (paleta violeta, alternando tonos oscuros y claros)
-const COLORES = ["#6d00a1", "#cb9bde", "#9032bb", "#af69cd", "#7900ac", "#8E8A94"];
+// Colores de los tratamientos (violetas oscuros y blanco: se distinguen sobre las tarjetas lila)
+const COLORES = ["#6d00a1", "#FFFFFF", "#9032bb", "#4A2A5C", "#7900ac", "#8E8A94"];
 
 function barra(nombre, texto, valor, maximo, color) {
   const ancho = maximo > 0 ? Math.max(0, valor) / maximo * 100 : 0;
@@ -444,7 +445,7 @@ function donut(trats) {
     return arco;
   }).join("");
   return `<svg class="donut" viewBox="0 0 120 120" role="img" aria-label="Participación de cada tratamiento en los ingresos">
-    <circle cx="60" cy="60" r="${R}" fill="none" stroke="#F1EDE8" stroke-width="22"/>${arcos}
+    <circle cx="60" cy="60" r="${R}" fill="none" stroke="#E0BDEC" stroke-width="22"/>${arcos}
     <text class="suave" x="60" y="58" text-anchor="middle" font-size="11">Ingresos</text>
     <text x="60" y="74" text-anchor="middle" font-size="12">por servicio</text></svg>`;
 }

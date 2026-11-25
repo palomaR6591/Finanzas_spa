@@ -1,6 +1,6 @@
 /* Guarda los archivos de la app en el dispositivo para que abra sin internet.
    Si se cambia algún archivo, se debe cambiar también el número de VERSION. */
-const VERSION = "finanzas-spa-v5";
+const VERSION = "finanzas-spa-v6";
 
 const ARCHIVOS = [
   "./",
