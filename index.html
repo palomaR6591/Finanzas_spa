@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Finanzas Spa · Calculadora de costos</title>
 <meta name="description" content="Finanzas Spa: calculadora de costos y ganancia operativa de la jornada para cualquier spa. Cada spa escribe sus propios datos. Proyecto final ADMI 1301.">
-<meta name="theme-color" content="#7900ac">
+<meta name="theme-color" content="#9032bb">
 <!-- La app solo tiene tema claro: evita que el navegador o extensiones la oscurezcan automáticamente -->
 <meta name="color-scheme" content="only light">
 <meta name="supported-color-schemes" content="light">
@@ -17,13 +17,13 @@
 <meta name="apple-mobile-web-app-title" content="Finanzas Spa">
 <style>
   :root {
-    /* Paleta violeta: #6d00a1, #7900ac, #9032bb, #af69cd y #cb9bde; superficies en crema y blanco */
+    /* Paleta violeta: #6d00a1, #7900ac, #9032bb, #af69cd y #cb9bde. Fondo de la página: #9032bb; tarjetas en blanco */
     --lila-1: #6d00a1;
     --lila-2: #7900ac;
     --lila-3: #9032bb;
     --lila-4: #af69cd;
     --lila-5: #cb9bde;
-    --fondo: #FAF7F2;       /* crema claro */
+    --fondo: #9032bb;       /* fondo de la página (lila-3) */
     --arena: #F1EDE8;
     --tarjeta: #FFFFFF;
     --tinta: #26212B;
@@ -36,7 +36,7 @@
     --noche: var(--lila-1);
     --linea: #E4DFE6;
   }
-  html { color-scheme: only light; background: #FAF7F2; }
+  html { color-scheme: only light; background: #9032bb; }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
@@ -55,7 +55,12 @@
   .cab p { margin: 2px 0 0; color: var(--suave); font-size: 14px; }
   .aviso { background: var(--arena); color: var(--suave); font-size: 13px; padding: 8px 20px; border-bottom: 1px solid var(--linea); text-align: center; }
 
-  main { max-width: 760px; margin: 0 auto; padding: 18px 16px calc(104px + env(safe-area-inset-bottom)); }
+  main { max-width: 760px; margin: 0 auto; padding: 18px 16px calc(104px + env(safe-area-inset-bottom));
+         /* Sobre el fondo morado el texto suelto es blanco; las tarjetas (fondo blanco) vuelven a los tonos oscuros */
+         --tinta: #FFFFFF; --suave: rgba(255, 255, 255, .92); --acento-texto: #FFFFFF; color: var(--tinta); }
+  .tarjeta-b, .trat, .control, .mini, .escenario-tarjeta, .comparacion .col, .error-caja, .bienvenida, table {
+    --tinta: #26212B; --suave: #5E5566; --acento-texto: #6d00a1; --boton-fondo: #7900ac; --boton-texto: #FFFFFF; color: var(--tinta);
+  }
 
   /* ---------- Navegación inferior ---------- */
   .nav {
@@ -73,7 +78,7 @@
 
   /* ---------- Textos y tarjetas ---------- */
   h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; font-size: 22px; margin: 28px 0 10px; }
-  h2::after { content: ""; display: block; width: 44px; height: 2px; background: var(--acento); margin-top: 6px; }
+  h2::after { content: ""; display: block; width: 44px; height: 2px; background: var(--acento-texto); margin-top: 6px; }
   h2.primero { margin-top: 4px; }
   .nota { font-size: 13px; color: var(--suave); margin: 10px 0 0; }
   .tarjeta-b { background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 14px; padding: 16px; }
@@ -91,7 +96,7 @@
     width: 100%; min-width: 0; font: inherit; font-size: 18px; padding: 11px 13px; border: 1.5px solid var(--linea);
     border-radius: 10px; background: var(--tarjeta); color: var(--tinta);
   }
-  input[type="text"]:focus { outline: 2px solid var(--acento); border-color: var(--acento); }
+  input[type="text"]:focus { outline: 2px solid var(--lila-1); border-color: var(--lila-1); box-shadow: 0 0 0 5px rgba(255, 255, 255, .85); }
   .fila { margin-bottom: 14px; }
   .dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .ayuda { font-size: 13px; color: var(--suave); margin: 0 0 14px; }
@@ -109,12 +114,12 @@
   .auto { font-size: 15px; color: var(--suave); background: var(--arena); border-radius: 10px; padding: 12px; }
 
   .boton {
-    font-size: 17px; font-weight: 700; background: var(--acento); color: #FFFFFF; border: 0; border-radius: 12px; padding: 14px 22px;
+    font-size: 17px; font-weight: 700; background: var(--boton-fondo, #FFFFFF); color: var(--boton-texto, #6d00a1); border: 0; border-radius: 12px; padding: 14px 22px;
   }
   .boton.grande { width: 100%; font-size: 18px; padding: 16px; }
   .boton:active { filter: brightness(.94); }
   .boton-sec {
-    font-size: 15px; font-weight: 600; color: var(--acento-texto); background: transparent; border: 1.5px solid var(--acento);
+    font-size: 15px; font-weight: 600; color: var(--acento-texto); background: transparent; border: 1.5px solid var(--acento-texto);
     border-radius: 12px; padding: 11px 16px;
   }
   .boton-chico {
@@ -152,8 +157,8 @@
   .deslizador output { font-weight: 700; color: var(--acento-texto); }
 
   /* ---------- Resultados ---------- */
-  .heroe { background: linear-gradient(135deg, var(--lila-2), var(--lila-3)); color: #FFFFFF; border-radius: 18px; padding: 20px; text-align: center;
-           box-shadow: 0 6px 18px rgba(121, 0, 172, .25); }
+  .heroe { background: linear-gradient(135deg, var(--lila-1), var(--lila-2)); color: #FFFFFF; border: 2px solid rgba(255, 255, 255, .6); border-radius: 18px; padding: 20px; text-align: center;
+           box-shadow: 0 6px 18px rgba(38, 0, 60, .3); }
   .heroe .et { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255, 255, 255, .9); font-weight: 600; }
   .heroe .gran { font-family: Georgia, serif; font-size: 40px; line-height: 1.15; margin: 4px 0 6px; }
   .heroe.negativa .gran { color: #FFC2B8; }
@@ -163,8 +168,11 @@
   .mini .valor { font-family: Georgia, serif; font-size: 24px; line-height: 1.1; }
   .mini .nombre { font-size: 12.5px; color: var(--suave); margin-top: 4px; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 15px; background: var(--tarjeta); border: 1px solid var(--linea); border-radius: 14px; overflow: hidden; }
   th, td { padding: 9px 6px; text-align: right; border-bottom: 1px solid var(--linea); }
+  th:first-child, td:first-child { padding-left: 12px; }
+  th:last-child, td:last-child { padding-right: 12px; }
+  tr:last-child td { border-bottom: 0; }
   th:first-child, td:first-child { text-align: left; }
   th { color: var(--acento-texto); font-weight: 600; font-size: 13px; }
   tr.fuerte td { font-weight: 700; background: var(--arena); }
@@ -213,17 +221,17 @@
   .comparacion .nuevo .et { color: rgba(255, 255, 255, .85); }
   .comparacion .gr { font-family: Georgia, serif; font-size: 22px; margin-top: 2px; }
   .delta { text-align: center; font-family: Georgia, serif; font-size: 32px; margin: 16px 0 2px; }
-  .delta.pos { color: var(--salvia-osc); }
-  .delta.neg { color: var(--alerta); }
+  .delta.pos { color: #C9F2D0; }
+  .delta.neg { color: #FFC2B8; }
 
   #cargando { text-align: center; padding: 70px 20px; color: var(--suave); }
-  #cargando .punto { width: 34px; height: 34px; margin: 0 auto 14px; border: 3px solid var(--linea); border-top-color: var(--acento); border-radius: 50%; animation: gira 1s linear infinite; }
+  #cargando .punto { width: 34px; height: 34px; margin: 0 auto 14px; border: 3px solid rgba(255, 255, 255, .35); border-top-color: #FFFFFF; border-radius: 50%; animation: gira 1s linear infinite; }
   @keyframes gira { to { transform: rotate(360deg); } }
-  footer { text-align: center; font-size: 12.5px; color: var(--suave); padding: 0 16px 20px; max-width: 760px; margin: 0 auto; }
+  footer { text-align: center; font-size: 12.5px; color: rgba(255, 255, 255, .92); padding: 0 16px 20px; max-width: 760px; margin: 0 auto; }
 
   .toast {
     position: fixed; left: 50%; bottom: calc(86px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 20;
-    background: var(--noche); color: #FFFFFF; padding: 10px 18px; border-radius: 999px; font-size: 14px;
+    background: var(--noche); color: #FFFFFF; border: 1.5px solid #FFFFFF; padding: 10px 18px; border-radius: 999px; font-size: 14px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, .25); max-width: 90vw; text-align: center;
   }
 
@@ -232,7 +240,7 @@
     .cab { background: none; color: #000; padding: 0 0 10px; border: 0; }
     .cab p { color: #333; }
     body { background: #fff; }
-    main { padding-bottom: 0; }
+    main { padding-bottom: 0; --tinta: #000; --suave: #333; --acento-texto: #000; }
     .heroe { background: #fff; color: #000; border: 2px solid #000; }
     .heroe .et, .heroe .sub { color: #333; }
   }
@@ -749,7 +757,7 @@ function dibujarCuerpoResultados() {
       <span><i style="background:${CLARO}"></i>Insumos ${d.costo_insumos}</span>
       <span><i style="background:${SALVIA}"></i>Ganancia ${negativa ? "$0" : d.ganancia}</span>
     </div>
-    ${negativa ? `<p class="nota" style="color:var(--alerta)">Los costos (${d.costos_totales}) superan a los ingresos (${d.ingresos_total}): hay pérdida operativa.</p>` : ""}
+    ${negativa ? `<p class="nota" style="color:#FFC2B8;font-weight:600">Los costos (${d.costos_totales}) superan a los ingresos (${d.ingresos_total}): hay pérdida operativa.</p>` : ""}
     <table style="margin-top:8px">
       <tr><td>Costo de personal (turnos)</td><td>${d.costo_personal}</td></tr>
       <tr><td>Costo de insumos</td><td>${d.costo_insumos}</td></tr>
